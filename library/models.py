@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Game(models.Model):
@@ -28,7 +29,12 @@ class Player(models.Model):
 
 class Loan(models.Model):
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name="loans")
-    player = models.ForeignKey(Player, on_delete=models.CASCADE, related_name="loans")
+    player = models.ForeignKey(
+        Player, on_delete=models.CASCADE, related_name="loans", null=True, blank=True
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_loans", null=True, blank=True
+    )
     loan_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(null=True, blank=True)
     is_returned = models.BooleanField(default=False)

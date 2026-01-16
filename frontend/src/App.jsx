@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import GameList from './pages/GameList';
 import PlayerList from './pages/PlayerList';
-import LoanList from './pages/LoanList';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import MyLoans from './pages/MyLoans';
 import { AnimatePresence } from 'framer-motion';
 import './index.css';
 
@@ -33,7 +33,7 @@ function App() {
                 <Link to="/" className="text-white no-underline font-semibold uppercase text-sm tracking-widest hover:text-[#00ffff] hover:scale-105 transition-all">Accueil</Link>
                 <Link to="/games" className="text-white no-underline font-semibold uppercase text-sm tracking-widest hover:text-[#00ffff] hover:scale-105 transition-all">Jeux</Link>
                 <Link to="/players" className="text-white no-underline font-semibold uppercase text-sm tracking-widest hover:text-[#00ffff] hover:scale-105 transition-all">Joueurs</Link>
-                <Link to="/loans" className="text-white no-underline font-semibold uppercase text-sm tracking-widest hover:text-[#00ffff] hover:scale-105 transition-all">Emprunts</Link>
+                <Link to="/my-loans" className="text-[#ffff00] no-underline font-semibold uppercase text-sm tracking-widest hover:text-[#00ffff] hover:scale-105 transition-all">Mes Emprunts</Link>
               </>
             )}
           </div>
@@ -54,7 +54,7 @@ function App() {
               <Route path="/" element={isAuth ? <Dashboard /> : <Login />} />
               <Route path="/games" element={isAuth ? <GameList /> : <Login />} />
               <Route path="/players" element={isAuth ? <PlayerList /> : <Login />} />
-              <Route path="/loans" element={isAuth ? <LoanList /> : <Login />} />
+              <Route path="/my-loans" element={isAuth ? <MyLoans /> : <Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

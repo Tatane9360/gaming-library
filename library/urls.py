@@ -20,4 +20,6 @@ urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/register/", views.register_user, name="register"),
+    path("api/games/<int:game_id>/rent/", views.rent_game, name="rent_game"),
+    path("api/my-loans/", views.my_loans, name="my_loans"),
 ]

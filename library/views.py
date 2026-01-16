@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from datetime import date
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .serializers import GameSerializer, PlayerSerializer, LoanSerializer
@@ -36,15 +36,23 @@ class LoanViewSet(viewsets.ModelViewSet):
 
 
 # Functional Views
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def return_game(request, pk):
     loan = get_object_or_404(Loan, pk=pk)
+    # Check if the loan belongs to the user
+    if loan.user != request.user:
+        return Response(
+            {"error": "Accès non autorisé"}, status=status.HTTP_403_FORBIDDEN
+        )
+
     if not loan.is_returned:
         loan.is_returned = True
         loan.return_date = date.today()
         loan.save()
         loan.game.is_available = True
         loan.game.save()
-    return HttpResponse(status=204)
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 def game_pdf(request, pk):
@@ -109,7 +117,31 @@ def register_user(request):
             status=status.HTTP_400_BAD_REQUEST,
         )
 
-    user = User.objects.create_user(username=username, password=password, email=email)
+    User.objects.create_user(username=username, password=password, email=email)
     return Response(
         {"message": "Utilisateur créé avec succès"}, status=status.HTTP_201_CREATED
     )
+
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def rent_game(request, game_id):
+    game = get_object_or_404(Game, pk=game_id)
+    if not game.is_available:
+        return Response(
+            {"error": "Le jeu n'est pas disponible"}, status=status.HTTP_400_BAD_REQUEST
+        )
+
+    loan = Loan.objects.create(game=game, user=request.user)
+    game.is_available = False
+    game.save()
+
+    return Response(LoanSerializer(loan).data, status=status.HTTP_201_CREATED)
+
+
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def my_loans(request):
+    loans = Loan.objects.filter(user=request.user).order_by("-loan_date")
+    serializer = LoanSerializer(loans, many=True)
+    return Response(serializer.data)

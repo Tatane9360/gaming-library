@@ -5,11 +5,30 @@ import { motion } from 'framer-motion';
 const GameList = () => {
     const [games, setGames] = useState([]);
 
+    async function fetchGames() {
+        try {
+            const res = await api.get('games/');
+            setGames(res.data);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
     useEffect(() => {
-        api.get('games/')
-            .then(res => setGames(res.data))
-            .catch(err => console.error(err));
+        fetchGames();
     }, []);
+
+    const handleRent = (gameId) => {
+        api.post(`games/${gameId}/rent/`)
+            .then(() => {
+                fetchGames();
+                alert('Jeu loué avec succès !');
+            })
+            .catch(err => {
+                const errorMsg = err.response?.data?.error || "Erreur lors de la location";
+                alert(errorMsg);
+            });
+    };
 
     return (
         <div className="space-y-8">
@@ -29,6 +48,7 @@ const GameList = () => {
                             <th className="p-4 text-[0.6rem] text-[#ffff00] border-b-2 border-[#ff00ff]">STUDIO</th>
                             <th className="p-4 text-[0.6rem] text-[#ffff00] border-b-2 border-[#ff00ff]">GENRE</th>
                             <th className="p-4 text-[0.6rem] text-[#ffff00] border-b-2 border-[#ff00ff]">STATUT</th>
+                            <th className="p-4 text-[0.6rem] text-[#ffff00] border-b-2 border-[#ff00ff]">ACTIONS</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,6 +67,16 @@ const GameList = () => {
                                         <span className="text-[0.6rem] px-2 py-1 bg-green-500/20 text-green-400 border border-green-500 shadow-[2px_2px_0_#065f46]">DISPONIBLE</span>
                                     ) : (
                                         <span className="text-[0.6rem] px-2 py-1 bg-yellow-500/20 text-yellow-400 border border-yellow-500 shadow-[2px_2px_0_#92400e]">EMPRUNTÉ</span>
+                                    )}
+                                </td>
+                                <td className="p-4">
+                                    {game.is_available && (
+                                        <button
+                                            onClick={() => handleRent(game.id)}
+                                            className="px-3 py-1 bg-[#ff00ff] text-white pixel-font text-[0.5rem] shadow-[2px_2px_0_#9d009d] hover:translate-y-[1px] hover:shadow-none transition-all"
+                                        >
+                                            LOUER
+                                        </button>
                                     )}
                                 </td>
                             </motion.tr>

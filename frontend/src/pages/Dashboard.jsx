@@ -26,7 +26,8 @@ const Dashboard = () => {
         players: 0,
         loans: 0,
         topGames: [],
-        genreData: []
+        genreData: [],
+        myLoans: 0
     });
 
     useEffect(() => {
@@ -35,6 +36,7 @@ const Dashboard = () => {
                 const gamesRes = await api.get('games/');
                 const playersRes = await api.get('players/');
                 const loansRes = await api.get('loans/');
+                const myLoansRes = await api.get('my-loans/');
 
                 const genres = {};
                 gamesRes.data.forEach(game => {
@@ -50,7 +52,8 @@ const Dashboard = () => {
                     players: playersRes.data.length,
                     loans: loansRes.data.filter(l => !l.is_returned).length,
                     topGames: gamesRes.data.slice(0, 5),
-                    genreData: genreData
+                    genreData: genreData,
+                    myLoans: myLoansRes.data.filter(l => !l.is_returned).length
                 });
             } catch (error) {
                 console.error("Erreur lors de la récupération des stats", error);
@@ -66,7 +69,8 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <StatCard title="TOTAL JEUX" value={stats.games} icon={Gamepad2} color="#00ffff" />
                 <StatCard title="JOUEURS INSCRITS" value={stats.players} icon={Users} color="#ff00ff" />
-                <StatCard title="EMPRUNTS ACTIFS" value={stats.loans} icon={ReceiptText} color="#ffff00" />
+                <StatCard title="MES EMPRUNTS" value={stats.myLoans} icon={ReceiptText} color="#ffff00" />
+                <StatCard title="TOTAL EMPRUNTS" value={stats.loans} icon={ReceiptText} color="#4f46e5" />
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
