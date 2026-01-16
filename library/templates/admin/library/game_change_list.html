@@ -1,0 +1,21 @@
+{% extends "admin/change_list.html" %} {% block object-tools-items %}
+<li>
+  <a
+    href="generate-data/"
+    class="addlink"
+    style="background-color: #10b981; color: white"
+  >
+    🚀 Générer Données
+  </a>
+</li>
+<li>
+  <a
+    href="delete-all/"
+    class="deletelink"
+    style="background-color: #ef4444; color: white"
+    onclick="return confirm('Êtes-vous sûr de vouloir supprimer TOUTES les données ?');"
+  >
+    🗑️ Supprimer TOUT
+  </a>
+</li>
+{{ block.super }} {% endblock %}

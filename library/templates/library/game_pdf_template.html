@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: sans-serif;
+        color: #333;
+        line-height: 1.6;
+      }
+      .header {
+        text-align: center;
+        border-bottom: 2px solid #ff00ff;
+        padding-bottom: 20px;
+        margin-bottom: 30px;
+      }
+      .title {
+        color: #ff00ff;
+        font-size: 28px;
+        margin: 0;
+      }
+      .info-section {
+        margin-bottom: 30px;
+      }
+      .info-grid {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .info-item {
+        width: 50%;
+        margin-bottom: 10px;
+      }
+      .label {
+        font-weight: bold;
+        color: #666;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th {
+        background-color: #f3f4f6;
+        text-align: left;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+      }
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+      }
+      .footer {
+        margin-top: 50px;
+        font-size: 12px;
+        color: #999;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1 class="title">FICHE_JEU : {{ game.title }}</h1>
+      <p>GÉNÉRÉE LE {{ today }}</p>
+    </div>
+    <div class="info-section">
+      <h2>INFOS_SYSTEME</h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <span class="label">STUDIO :</span> {{ game.studio }}
+        </div>
+        <div class="info-item">
+          <span class="label">GENRE :</span> {{ game.genre }}
+        </div>
+        <div class="info-item">
+          <span class="label">PLATEFORME :</span> {{ game.platform }}
+        </div>
+        <div class="info-item">
+          <span class="label">RELEASE :</span> {{ game.release_date }}
+        </div>
+        <div class="info-item">
+          <span class="label">STATUT :</span> {{
+          game.is_available|yesno:"READY,LOCKED" }}
+        </div>
+      </div>
+    </div>
+    <div class="info-section">
+      <h2>LOG_EMPRUNTS</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>JOUEUR</th>
+            <th>DATE_EMPRUNT</th>
+            <th>DATE_RETOUR</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in loans %}
+          <tr>
+            <td>{{ loan.player }}</td>
+            <td>{{ loan.loan_date }}</td>
+            <td>{{ loan.return_date|default:"EN COURS" }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="3">AUCUNE DONNÉE</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="footer">GAME_LIBRARY SYSTEM v1.0 - NOSTALGIA MODE ACTIVE</div>
+  </body>
+</html>
