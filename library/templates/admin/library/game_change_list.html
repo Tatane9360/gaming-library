@@ -18,4 +18,37 @@
     🗑️ Supprimer TOUT
   </a>
 </li>
-{{ block.super }} {% endblock %}
+{{ block.super }}
+
+<div
+  style="
+    margin: 20px 0;
+    padding: 20px;
+    background: #0d0221;
+    border: 2px solid #4f46e5;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.4);
+  "
+>
+  <h3
+    style="
+      color: #00ffff;
+      font-family: monospace;
+      text-transform: uppercase;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #4f46e5;
+      padding-bottom: 10px;
+    "
+  >
+    📊 ANALYSE_DES_DONNÉES.EXE
+  </h3>
+  <div style="text-align: center">
+    <img
+      src="stats-chart/"
+      alt="Graphique des statistiques"
+      style="max-width: 100%; height: auto; border: 1px solid #333"
+    />
+  </div>
+</div>
+
+{% endblock %}
