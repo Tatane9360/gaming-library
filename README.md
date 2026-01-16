@@ -85,8 +85,4 @@ Une application moderne de gestion de bibliothèque de jeux retro avec un look *
 - **API** : Le frontend utilise une instance Axios configurée dans `frontend/src/api.js` qui injecte automatiquement le token JWT.
 - **Récupération des données** : Les vues Django sont principalement des `APIView` ou des fonctions décorées avec `@api_view`.
 
----
-
-## 📜 Licence
-
-Projet créé pour la gestion ultime de jeux retro. Profitez bien ! 👾
+fait par ethan sulejman 
